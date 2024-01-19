@@ -25,7 +25,7 @@ const corsOptions = {
     origin: '*'
 }
 
-app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.json({limit: '2gb', extended: true}))
 app.use(morgan('dev'))
 app.use(cors(corsOptions))
 app.use(express.json())

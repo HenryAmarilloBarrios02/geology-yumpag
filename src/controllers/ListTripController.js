@@ -67,7 +67,38 @@ export const getListTripGeneral = async (req, res) => {
             return res.status(404).json({ message: 'List Trip not found' })
         }
 
-        return res.status(200).json(listTrip)
+        const listTripFinal = listTrip.map((lista) => {
+            return {
+                _id: lista._id,
+                travel_Id: lista.travel_Id,
+                fecha: lista.fecha,
+                hora: lista.hora,
+                turno: lista.turno,
+                operador: lista.operador,
+                vehiculo: lista.vehiculo,
+                vagones: lista.vagones,
+                mina: lista.mina,
+                tipo: lista.tipo,
+                tajo: lista.tajo,
+                ton: lista.ton,
+                tonh: lista.tonh,
+                material: lista.material,
+                ruma: lista.ruma,
+                ley_ag: lista.ley_ag.toFixed(2),
+                ley_fe: lista.ley_fe.toFixed(2),
+                ley_mn: lista.ley_mn.toFixed(2),
+                ley_pb: lista.ley_pb.toFixed(2),
+                ley_zn: lista.ley_zn.toFixed(2),
+                fecha_abast: lista.fecha_abast,
+                datetime: lista.datetime,
+                statusMina: lista.statusMina,
+                validMina: lista.validMina,
+                statusGeology: lista.statusGeology,
+                validGeology: lista.validGeology
+            }
+        })
+
+        return res.status(200).json(listTripFinal)
         
     } catch (error) {
         res.json({ message: error.message });
@@ -91,6 +122,8 @@ export const createListTrip = async (req, res) => {
 
             if (rumas) {
                 rumas.travels.push(newListTrip._id);
+                // guardar el n_travels
+                rumas.n_travels = rumas.travels.length;
                 await rumas.save();
             } else {
                 return res.status(400).json({ status: false, message: 'La ruma proporcionada no existe' });
@@ -101,7 +134,7 @@ export const createListTrip = async (req, res) => {
 
         return res.status(200).json({ status: true, message: 'List Trip created successfully' });
     } catch (error) {
-        res.status(500).json({ status: false, message: error.message });
+        res.json({ message: error.message });
     }
 }
 
@@ -113,6 +146,7 @@ export const updateListTrip = async (req, res) => {
         const listTrip = await ListTripModel.findOne({_id: travel_Id})
 
         if(!listTrip) {
+            console.log('List Trip not found')
             return res.status(200).json({ status: false, message: 'List Trip not found' })
         }
 

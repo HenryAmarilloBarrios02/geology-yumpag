@@ -5,7 +5,8 @@ const rumaSchema = new mongoose.Schema({
     data: JSON,
     ton: Number,
     tonh: Number,
-    status: String,
+    statusBelong: String,
+    statusTransition: String,
     valid: Number,
     rumas_united: JSON,
     travels: [
@@ -14,6 +15,7 @@ const rumaSchema = new mongoose.Schema({
             ref: 'list-trip'
         }
     ],
+    n_travels: Number,
     createdAt: {
         type: Date,
         default: Date.now
