@@ -4,7 +4,7 @@ import RumaModel from '../models/RumaModel.js'
 export const getAllRumas = async (req, res) => {
     try {
 
-        const rumas = await RumaModel.find({valid: 1}, { _id: 0, travels: 0, data: 0, rumas_united: 0, createdAt: 0})
+        const rumas = await RumaModel.find({valid: 1, statusBelong: 'single'}, { _id: 0, travels: 0, data: 0, rumas_united: 0, createdAt: 0})
 
         return res.status(200).json(rumas)
         
@@ -61,7 +61,7 @@ export const createRuma = async (req, res) => {
             ruma_Id: newRumaId,
             valid: 1,
             statusBelong: 'single',
-            statusTransition: 'llenado',
+            statusTransition: 'llenando',
             ton: 0,
             tonh: 0,
         });
@@ -178,7 +178,7 @@ export const updateOrCreateRumas = async (req, res) => {
         const n_travels = rumas.map(ruma => ruma.n_travels)
 
         const updateRumas = await Promise.all(rumas.map(async ruma => {
-            const updateRuma = await RumaModel.updateOne({ ruma_Id: ruma.ruma_Id }, { $set: { valid: 0, statusTransition: 'planta' } });
+            const updateRuma = await RumaModel.updateOne({ ruma_Id: ruma.ruma_Id }, { $set: { valid: 0, statusTransition: 'unido' } });
             return updateRuma;
         }));
 
@@ -204,7 +204,7 @@ export const updateOrCreateRumas = async (req, res) => {
 
         const newRuma = new RumaModel({
             ruma_Id: newRumaId,
-            valid: 0,
+            valid: 1,
             statusBelong: 'multiple',
             statusTransition: 'planta',
             rumas_united: rumaIds,
